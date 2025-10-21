@@ -1,0 +1,1757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Meal Planner</title>
+    <style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f5f5f5;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    text-align: center;
+    padding: 2rem 0;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    font-weight: 300;
+}
+
+section {
+    background: white;
+    margin-bottom: 2rem;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+h2 {
+    color: #4a5568;
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+}
+
+h3 {
+    color: #2d3748;
+    margin-bottom: 1rem;
+}
+
+.search-controls {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+#search-input {
+    flex: 1;
+    min-width: 250px;
+    padding: 12px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+#search-input:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+#meal-filter {
+    padding: 12px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 16px;
+    background: white;
+    min-width: 150px;
+}
+
+.recipe-grid {
+    display: -ms-grid;
+    display: grid;
+    -ms-grid-columns: 1fr 1.5rem 1fr 1.5rem 1fr;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.recipe-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 0;
+    background: white;
+    transition: transform 0.2s, box-shadow 0.2s;
+    overflow: visible;
+    position: relative;
+    z-index: 1;
+}
+
+.recipe-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+.recipe-card:has(.meal-options:not(.hidden)) {
+    z-index: 1001;
+}
+
+.recipe-image-wrapper {
+    width: 100%;
+    height: 150px;
+    overflow: hidden;
+    border-radius: 10px 10px 0 0;
+}
+
+.recipe-image {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    transform: scale(1.3);
+}
+
+.recipe-content {
+    padding: 1.5rem;
+}
+
+.recipe-card h3 {
+    color: #2d3748;
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+}
+
+.recipe-card p {
+    margin-bottom: 0.5rem;
+    color: #4a5568;
+    font-size: 0.9rem;
+}
+
+.recipe-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.btn-view {
+    background-color: #4299e1;
+    color: white;
+}
+
+.btn-view:hover {
+    background-color: #3182ce;
+}
+
+.btn-add {
+    background-color: #48bb78;
+    color: white;
+}
+
+.btn-add:hover {
+    background-color: #38a169;
+}
+
+.btn-remove {
+    background-color: #f56565;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 50%;
+    font-weight: bold;
+    margin-left: 0.5rem;
+    flex-shrink: 0;
+    min-width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-remove:hover {
+    background-color: #e53e3e;
+}
+
+.meal-plan-grid {
+    display: -ms-grid;
+    display: grid;
+    -ms-grid-columns: 1fr 2rem 1fr 2rem 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.meal-column {
+    background: #f7fafc;
+    padding: 1.5rem;
+    border-radius: 10px;
+    border: 2px solid #e2e8f0;
+}
+
+.meal-column h3 {
+    text-align: center;
+    color: #4a5568;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.meal-list {
+    min-height: 200px;
+}
+
+.meal-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    transition: box-shadow 0.2s;
+}
+
+.meal-item:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.meal-info {
+    flex: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.meal-details {
+    flex: 1;
+}
+
+.drag-handle {
+    color: #cbd5e0;
+    font-size: 16px;
+    cursor: grab;
+    padding: 0 4px;
+    user-select: none;
+}
+
+.meal-item:hover .drag-handle {
+    color: #4a5568;
+}
+
+.meal-item.dragging {
+    opacity: 0.5;
+    transform: rotate(2deg);
+}
+
+.drop-zone.drag-over {
+    background-color: #e6fffa;
+    border: 2px dashed #38b2ac;
+    border-radius: 8px;
+}
+
+.meal-item:active .drag-handle {
+    cursor: grabbing;
+}
+
+.meal-item.insert-above::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background-color: #38b2ac;
+    border-radius: 2px;
+    z-index: 10;
+}
+
+.meal-item.insert-below::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background-color: #38b2ac;
+    border-radius: 2px;
+    z-index: 10;
+}
+
+.meal-item {
+    position: relative;
+}
+
+.meal-info h4 {
+    color: #2d3748;
+    margin-bottom: 0.25rem;
+}
+
+.meal-info p {
+    color: #718096;
+    font-size: 0.8rem;
+}
+
+.meal-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.serving-buttons {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.btn-serving {
+    padding: 4px 8px;
+    font-size: 0.75rem;
+    background-color: #f7fafc;
+    color: #4a5568;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    min-width: 32px;
+}
+
+.btn-serving:hover {
+    background-color: #e2e8f0;
+}
+
+.btn-serving.active {
+    background-color: #667eea;
+    color: white;
+    border-color: #667eea;
+}
+
+.btn-serving.active:hover {
+    background-color: #5a6fd8;
+}
+
+.grocery-grid {
+    display: -ms-grid;
+    display: grid;
+    -ms-grid-columns: 1fr 1rem 1fr 1rem 1fr;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.grocery-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f7fafc;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    min-height: 60px;
+    position: relative;
+}
+
+.ingredient-name {
+    font-weight: 500;
+    color: #2d3748;
+    flex: 1;
+    padding-right: 1rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.ingredient-quantity {
+    color: #4a5568;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    margin-left: auto;
+    padding-left: 1rem;
+    font-weight: 600;
+    background: #e2e8f0;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    min-width: fit-content;
+}
+
+#clear-grocery-list {
+    background-color: #ed8936;
+    color: white;
+    padding: 12px 24px;
+    font-size: 16px;
+}
+
+#clear-grocery-list:hover {
+    background-color: #dd6b20;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 5% auto;
+    padding: 2rem;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+}
+
+.close {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: #000;
+}
+
+.modal-content h2 {
+    margin-bottom: 1rem;
+    color: #2d3748;
+}
+
+.modal-content h3 {
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: #4a5568;
+}
+
+.modal-content ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.modal-content li {
+    background: #f7fafc;
+    padding: 0.5rem;
+    margin-bottom: 0.25rem;
+    border-radius: 4px;
+    border-left: 3px solid #667eea;
+}
+
+.recipe-description {
+    font-style: italic;
+    color: #4a5568;
+    background: #f7fafc;
+    padding: 1rem;
+    border-radius: 8px;
+    border-left: 4px solid #667eea;
+    margin: 1rem 0;
+}
+
+.nutrition-total {
+    font-size: 0.9rem;
+    color: #718096;
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: #edf2f7;
+    border-radius: 4px;
+}
+
+.serving-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 1rem 0;
+    padding: 1rem;
+    background: #f7fafc;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+}
+
+.serving-controls label {
+    font-weight: 500;
+    color: #4a5568;
+}
+
+.serving-controls .btn {
+    padding: 6px 12px;
+    font-size: 12px;
+    background-color: #e2e8f0;
+    color: #4a5568;
+    border: 1px solid #cbd5e0;
+}
+
+.serving-controls .btn:hover {
+    background-color: #cbd5e0;
+}
+
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    z-index: 1001;
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    max-width: 300px;
+}
+
+.notification.show {
+    transform: translateX(0);
+}
+
+.notification.success {
+    background-color: #48bb78;
+    color: white;
+    border-left: 4px solid #38a169;
+}
+
+.notification.warning {
+    background-color: #ed8936;
+    color: white;
+    border-left: 4px solid #dd6b20;
+}
+
+.notification.error {
+    background-color: #f56565;
+    color: white;
+    border-left: 4px solid #e53e3e;
+}
+
+.meal-type-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.meal-options {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    z-index: 1000;
+    margin-top: 2px;
+    min-width: 150px;
+}
+
+.meal-options.hidden {
+    display: none;
+}
+
+.btn-meal-option {
+    display: block;
+    width: 100%;
+    padding: 8px 16px;
+    border: none;
+    background: white;
+    color: #4a5568;
+    text-align: left;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 0;
+}
+
+.btn-meal-option:hover {
+    background-color: #f7fafc;
+}
+
+.btn-meal-option:first-child {
+    border-radius: 6px 6px 0 0;
+}
+
+.btn-meal-option:last-child {
+    border-radius: 0 0 6px 6px;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+    
+    header h1 {
+        font-size: 2rem;
+    }
+    
+    .search-controls {
+        flex-direction: column;
+    }
+    
+    .recipe-grid {
+        -ms-grid-columns: 1fr;
+        grid-template-columns: 1fr;
+    }
+    
+    .meal-plan-grid {
+        -ms-grid-columns: 1fr;
+        grid-template-columns: 1fr;
+    }
+    
+    .grocery-grid {
+        -ms-grid-columns: 1fr;
+        grid-template-columns: 1fr;
+    }
+    
+    .grocery-item {
+        min-height: 50px;
+        padding: 0.75rem;
+    }
+    
+    .ingredient-name {
+        font-size: 0.9rem;
+        padding-right: 0.5rem;
+    }
+    
+    .ingredient-quantity {
+        font-size: 0.8rem;
+        padding: 0.2rem 0.4rem;
+    }
+    
+    .meal-item {
+        padding: 0.75rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .meal-controls {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .btn-serving {
+        font-size: 0.7rem;
+        padding: 3px 6px;
+        min-width: 28px;
+    }
+    
+    .notification {
+        top: 10px;
+        right: 10px;
+        left: 10px;
+        max-width: none;
+        font-size: 0.8rem;
+        padding: 0.75rem 1rem;
+    }
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Recipe Meal Planner</h1>
+        </header>
+
+        <main>
+            <section class="search-section">
+                <h2>Search Recipes</h2>
+                <div class="search-controls">
+                    <input type="text" id="search-input" placeholder="Search for recipes...">
+                    <select id="meal-filter">
+                        <option value="">All Meals</option>
+                        <option value="Breakfast">Breakfast</option>
+                        <option value="Lunch">Lunch</option>
+                        <option value="Dinner">Dinner</option>
+                    </select>
+                </div>
+                <div id="recipe-results" class="recipe-grid"></div>
+            </section>
+
+            <section class="meal-planning">
+                <h2>Meal Planning</h2>
+                <div class="meal-plan-grid">
+                    <div class="meal-column">
+                        <h3>Breakfast</h3>
+                        <div id="breakfast-meals" class="meal-list drop-zone" data-meal="Breakfast"></div>
+                    </div>
+                    <div class="meal-column">
+                        <h3>Lunch</h3>
+                        <div id="lunch-meals" class="meal-list drop-zone" data-meal="Lunch"></div>
+                    </div>
+                    <div class="meal-column">
+                        <h3>Dinner</h3>
+                        <div id="dinner-meals" class="meal-list drop-zone" data-meal="Dinner"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="grocery-list">
+                <h2>Grocery List</h2>
+                <div id="grocery-items" class="grocery-grid"></div>
+                <button id="clear-grocery-list" class="btn">Clear Grocery List</button>
+            </section>
+        </main>
+    </div>
+
+    <div id="recipe-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modal-recipe-content"></div>
+        </div>
+    </div>
+
+    <div id="notification" class="notification"></div>
+
+
+    <script>
+let recipes = [
+  {
+    "title": "Chickpea, Sweet Potato & Rice Bake",
+    "section": "Lunch, Dinner",
+    "estimated_time": "40 Minutes (10 prep, 30 bake)",
+    "meal_type": "Multi-Serving Meal Prep",
+    "dietary_restrictions": "Post-Surgery, Limited Ingredient, Easy to Digest, Meal Prep, Easy Reheat, Plant-based",
+    "image": "images/Chickpea, Sweet Potato & Rice Bake.png",
+    "servings": "6",
+    "prep_time": "10 min",
+    "cook_time": "30 min",
+    "ingredients": [
+      {"name": "Canned Chickpeas", "quantity": "1 cup", "description": "drained"},
+      {"name": "Sweet Potatoes", "quantity": "2 medium", "description": ""},
+      {"name": "Rice", "quantity": "1 cup", "description": "cooked"}
+    ],
+    "steps": [
+      "Peel and cube sweet potatoes (about 1/2-inch).",
+      "Steam or microwave for 5–7 minutes until just tender.",
+      "In a bowl, mix chickpeas, sweet potatoes, rice, and a pinch of salt.",
+      "Lightly grease a baking dish (about 9x9-inch) and spread the mixture evenly.",
+      "Bake uncovered at 350°F (175°C) for 25–30 minutes, until heated through and lightly crisped on top.",
+      "Let rest a few minutes before serving."
+    ],
+    "nutrition": {
+      "calories": "190",
+      "fat": "1g",
+      "carbs": "32g",
+      "protein": "8g"
+    },
+    "reheat": "Covered in microwave, 2 min; oven 325°F 10 min.",
+    "storage": "Refrigerate 4 days; freeze 2 months."
+  },
+  {
+    "title": "Zucchini, Quinoa & Tomato Bake",
+    "section": "Lunch, Dinner",
+    "estimated_time": "40 Minutes (10 prep, 30 bake)",
+    "meal_type": "Multi-Serving Meal Prep",
+    "dietary_restrictions": "Post-Surgery, Limited Ingredient, Easy to Digest, Meal Prep, Easy Reheat, Plant-based",
+    "image": "images/Zucchini, Quinoa & Tomato Bake.png",
+    "servings": "5",
+    "prep_time": "10 min",
+    "cook_time": "30 min",
+    "ingredients": [
+      {"name": "Zucchini", "quantity": "2 cups", "description": "diced"},
+      {"name": "Quinoa", "quantity": "1 cup", "description": "cooked"},
+      {"name": "Canned Tomato Puree", "quantity": "1 cup", "description": ""},
+      {"name": "Salt", "quantity": "Pinch", "description": ""}
+    ],
+    "steps": [
+      "In a large bowl, combine zucchini, quinoa, tomato puree, and a pinch of salt. Stir until fully mixed.",
+      "Transfer the mixture to a greased baking dish (about 8x8 or 9x9 inches), spreading it out evenly.",
+      "Bake uncovered for 25–30 minutes, until heated through and the top is slightly thickened."
+    ],
+    "nutrition": {
+      "calories": "170",
+      "fat": "1g",
+      "carbs": "32g",
+      "protein": "6g"
+    },
+    "reheat": "Microwave or oven with splash of broth.",
+    "storage": "Refrigerate 4 days; freeze 2 months."
+  },
+  {
+    "title": "DASH Turkey Shepherd's Pie",
+    "section": "Lunch, Dinner",
+    "estimated_time": "50 Minute (15 prep 35 bake)",
+    "meal_type": "Multi-Serving Meal Prep",
+    "dietary_restrictions": "Post-Surgery, Limited Ingredient, DASH Diet, Easy to Digest, Meal Prep, Easy Reheat",
+    "description": "Ground turkey layered under a thin mashed potato topping, flavored mildly with steamed carrots or peas. Lower in fat and sodium than the traditional version.",
+    "image": "images/DASH Turkey Shepherd's Pie.png",
+    "servings": "5",
+    "prep_time": "15 min",
+    "cook_time": "35 min",
+    "ingredients": [
+      {"name": "Lean Ground Turkey", "quantity": "1 lb", "description": ""},
+      {"name": "Cooked Peas and Chopped Carrots", "quantity": "2 cups", "description": "soft"},
+      {"name": "Mashed Potatoes", "quantity": "3 cups", "description": "made with water or milk"},
+      {"name": "Salt", "quantity": "Pinch", "description": ""},
+      {"name": "Pepper", "quantity": "Pinch", "description": ""}
+    ],
+    "steps": [
+      "Preheat 375°F. In dish",
+      "Prepare ground turkey in skillet until fully cooked",
+      "Layer turkey base, vegetables, then top with mashed potato. Bake 30 min until lightly set."
+    ],
+    "nutrition": {
+      "calories": "240",
+      "fat": "4g",
+      "carbs": "30g",
+      "protein": "16g"
+    },
+    "reheat": "Oven: 325°F for 15 min, covered. Microwave: Cover, 2 min, stir halfway",
+    "storage": "Refrigerate 4 days; freeze 2 months."
+  },
+  {
+    "title": "Hummus & Soft Pita Pockets",
+    "section": "Lunch, Dinner",
+    "estimated_time": "5 Minutes",
+    "meal_type": "Snack, Lunch",
+    "dietary_restrictions": "Easily Digestible, Plant-based",
+    "description": "For those tolerating legumes well, soft hummus with pita can be a great protein snack. Choose plain hummus without garlic or lemon for sensitivity.",
+    "image": "images/Hummus & Soft Pita Pockets.png",
+    "servings": "1",
+    "prep_time": "5 min",
+    "cook_time": "No Cook",
+    "ingredients": [
+      {"name": "Hummus", "quantity": "1/4 cup", "description": "plain"},
+      {"name": "Pita", "quantity": "1/2 piece", "description": "warmed slightly or room temp"}
+    ],
+    "steps": [
+      "Warm 1/2 soft pita bread slightly or use at room temperature.",
+      "Spread 1/4 cup plain hummus evenly inside the pita half, or serve the hummus on the side for dipping.",
+      "Serve immediately as a quick and easy plant-based protein snack."
+    ],
+    "nutrition": {
+      "calories": "180",
+      "fat": "6g",
+      "carbs": "24g",
+      "protein": "6g"
+    },
+    "storage": "Consume same day. Pita may harden in fridge."
+  },
+  {
+    "title": "Low-Sodium Chicken & Rice Casserole",
+    "section": "Lunch, Dinner",
+    "estimated_time": "45 Minutes (10 prep, 35 bake) ",
+    "meal_type": "Multi-Serving Meal Prep",
+    "dietary_restrictions": "Post-Surgery, Limited Ingredient, DASH Diet, Easy to Digest, Meal Prep, Easy Reheat",
+    "description": "A classic chicken-and-rice bake with modest seasoning, tender chicken breast, soft rice, and a light milk-based sauce. Comforting like homemade but gentle on digestion and sodium-conscious.",
+    "image": "images/Low-Sodium Chicken & Rice Casserole.png",
+    "servings": "6",
+    "prep_time": "10 min",
+    "cook_time": "35 min",
+    "ingredients": [
+      {"name": "Chicken Breast", "quantity": "3 cups", "description": "shredded cooked"},
+      {"name": "White Rice", "quantity": "1 1/2 cups", "description": "cooked"},
+      {"name": "Milk", "quantity": "1 1/2 cups", "description": "low-fat"},
+      {"name": "Dried Parsley", "quantity": "1 tsp", "description": ""},
+      {"name": "Salt", "quantity": "Pinch", "description": ""}
+    ],
+    "steps": [
+      "Lightly grease a baking dish (about 9x13 inches).",
+      "In a large bowl, combine chicken, rice, milk, parsley, and a pinch of salt. Mix until well combined.",
+      "Pour the mixture into the prepared baking dish, spreading it evenly.",
+      "Cover with foil and bake for 30 minutes.",
+      "Uncover dish and bake for an additional 5 minutes, until the top is lightly golden."
+    ],
+    "nutrition": {
+      "calories": "210",
+      "fat": "4g",
+      "carbs": "20g",
+      "protein": "22g"
+    },
+    "reheat": "Oven: 325°F for ~10 min covered, adding splash of milk if dry. Microwave: Covered, 1–2 min, stir halfway",
+    "storage": "Refrigerate up to 4 days; freeze up to 2 months. Thaw overnight before heating."
+  },
+  {
+    "title": "Egg and Ricotta Pancakes",
+    "section": "Breakfast",
+    "estimated_time": "13 Minutes",
+    "meal_type": "Breakfast",
+    "dietary_restrictions": "Post-Surgery- Eaily Digestible, High Calorie",
+    "description": "These soft, protein-rich pancakes use eggs and ricotta to create a light and fluffy texture. Ricotta offers digestible protein and calcium, while a small amount of flour makes them feel more like a traditional breakfast dish.",
+    "image": "images/Egg and Ricotta Pancakes.png",
+    "servings": "2",
+    "prep_time": "5 min",
+    "cook_time": "8 min",
+    "pans_needed": "1 skillet or griddle",
+    "ingredients": [
+      {"name": "Eggs", "quantity": "2 large", "description": ""},
+      {"name": "Ricotta Cheese", "quantity": "1/2 cup", "description": ""},
+      {"name": "All Purpose Flour", "quantity": "2 tbsp", "description": ""},
+      {"name": "Vanilla", "quantity": "1/4 tsp", "description": "optional for flavor"},
+      {"name": "Olive Oil/Butter", "quantity": "1 tsp", "description": "for cooking"}
+    ],
+    "steps": [
+      "Mix eggs, ricotta, flour, and vanilla in a bowl until smooth.",
+      "Heat a nonstick skillet with a little oil over medium-low heat.",
+      "Pour batter to form small pancakes and cook for 3 to 4 minutes per side until golden and cooked through.",
+      "Serve warm."
+    ],
+    "nutrition": {
+      "calories": "230",
+      "fat": "16g",
+      "carbs": "6g",
+      "protein": "14g",
+      "fiber": "0g",
+      "sodium": "130mg",
+      "sugar": "1g"
+    },
+    "nutrition_total": "Total (for 2 Servings): Calories: 460, Fat: 32g, Carbs: 12g, Protein: 28g, Fiber: 0g, Sodium: 260mg, Sugar: 2g"
+  },
+  {
+    "title": "Savory Egg Muffins with Soft Veggies & Cheese",
+    "section": "Breakfast",
+    "estimated_time": "28 Minutes (10 prep, 20 bake)",
+    "meal_type": "Breakfast",
+    "dietary_restrictions": "Post-Surgery- Eaily Digestible, High Calorie",
+    "description": "These savory egg muffins are soft, flavorful, and can be made ahead. They're filled with finely chopped sautéed vegetables like zucchini and carrots, plus mild cheese for protein and richness. Baking makes them light and tender, making them easy to eat, but genuinely tasty.",
+    "image": "images/Savory Egg Muffins with Soft Veggies & Cheese.png",
+    "servings": "4",
+    "prep_time": "10 min",
+    "cook_time": "18 min",
+    "pans_needed": "1 muffin tin + 1 skillet",
+    "ingredients": [
+      {"name": "Eggs", "quantity": "6 large", "description": ""},
+      {"name": "Shreadded Mild Cheddar or Mozzarella", "quantity": "1/3 cup", "description": ""},
+      {"name": "Chopped Zucchini", "quantity": "1/4 cup", "description": "finely chopped"},
+      {"name": "Carrot", "quantity": "1/4 cup", "description": "finely grated"},
+      {"name": "Olive Oil", "quantity": "1 tsp", "description": ""},
+      {"name": "Salt", "quantity": "Pinch", "description": ""}
+    ],
+    "steps": [
+      "Preheat oven to 350°F (175°C).",
+      "Sauté zucchini and carrot in olive oil for 2–3 minutes until soft.",
+      "In a bowl, beat eggs, add cheese, salt, and sautéed veggies.",
+      "Pour into greased muffin tin (makes ~8 muffins).",
+      "Bake 16–18 minutes until set.",
+      "Let cool slightly before eating."
+    ],
+    "nutrition": {
+      "calories": "210",
+      "fat": "14g",
+      "carbs": "4g",
+      "protein": "15g",
+      "fiber": "0.7g",
+      "sodium": "160mg",
+      "sugar": "2g"
+    },
+    "nutrition_total": "Total (for 4 Servings / 8 muffins): Calories: 840, Fat: 56g, Carbs: 16g, Protein: 60g, Fiber: 2.8g, Sodium: 640mg, Sugar: 8g"
+  },
+  {
+    "title": "Ricotta Toast with Cinnamon Pear",
+    "section": "Breakfast",
+    "estimated_time": "5 Minutes",
+    "meal_type": "Snack, Breakfast",
+    "dietary_restrictions": "Easily Digestible, High Protein",
+    "description": "Ricotta is soft and mild, and pairs beautifully with fresh or canned pears and a sprinkle of cinnamon.",
+    "image": "images/Ricotta Toast with Cinnamon Pear.png",
+    "servings": "1",
+    "prep_time": "5 min",
+    "ingredients": [
+      {"name": "White or Sourdough Bread", "quantity": "1 slice", "description": "soft"},
+      {"name": "Ricotta", "quantity": "1/4 cup", "description": ""},
+      {"name": "Pear", "quantity": "2-3 slices", "description": "ripe or canned"},
+      {"name": "Cinnamon", "quantity": "Dash", "description": ""}
+    ],
+    "steps": [
+      "Spread ricotta on toast, layer pear, sprinkle cinnamon.",
+      "Cut into squares for easier chewing."
+    ],
+    "nutrition": {
+      "calories": "190",
+      "fat": "6g",
+      "carbs": "22g",
+      "protein": "9g"
+    },
+    "storage": "Assemble fresh. Do not freeze."
+  },
+  {
+    "title": "Avocado Toast with Poached Egg",
+    "section": "Breakfast",
+    "estimated_time": "8-10 Minutes",
+    "meal_type": "Snack, Breakfast",
+    "dietary_restrictions": "Prostate or Lung Cancer",
+    "description": "Whole grain toast topped with creamy mashed avocado and a perfectly poached egg with a soft yolk.",
+    "image": "images/Avocado Toast with Poached Egg.png",
+    "servings": "1",
+    "prep_time": "5 min",
+    "cook_time": "5 min",
+    "ingredients": [
+      {"name": "Whole Grain Bread", "quantity": "2 slices", "description": ""},
+      {"name": "Ripe Avocado", "quantity": "1", "description": ""},
+      {"name": "Egg", "quantity": "2", "description": ""},
+      {"name": "Salt", "quantity": "1 pinch", "description": ""},
+      {"name": "Pepper", "quantity": "1 pinch", "description": ""}
+    ],
+    "steps": [
+      "Toast the bread.",
+      "Mash and spread the avocado on the toast.",
+      "Create a whirlpool in simmering water, slide in the egg, and cook for 3 minutes for a soft yolk.",
+      "Remove the egg and drain.",
+      "Top the toast with the poached egg and season with salt, pepper, and optional toppings."
+    ],
+    "storage": "Assemble fresh. Do not store."
+  },
+  {
+    "title": "Baked Sweet Potato Chips",
+    "section": "Lunch, Dinner",
+    "estimated_time": "20-25 Minutes",
+    "meal_type": "Snack",
+    "dietary_restrictions": "Breast, Prostate, Lung and Colon Cancer",
+    "description": "Crispy baked sweet potato chips seasoned with olive oil and salt, a healthy alternative to regular chips.",
+    "image": "images/Baked Sweet Potato Chips.png",
+    "servings": "2-3",
+    "prep_time": "5 min",
+    "cook_time": "20 min",
+    "ingredients": [
+      {"name": "Sweet Potatoes", "quantity": "2 medium", "description": ""},
+      {"name": "Oil of Choice", "quantity": "1 tbsp", "description": ""},
+      {"name": "Salt", "quantity": "1/2 tsp", "description": ""}
+    ],
+    "steps": [
+      "Preheat the oven to 375°F (190°C) and line a baking sheet with parchment paper.",
+      "Wash, dry, and slice the sweet potatoes into thin even rounds.",
+      "Toss with olive oil, salt, and seasonings.",
+      "Arrange in a single layer on the sheet and bake for 15–20 minutes, flipping halfway, until crispy.",
+      "Let cool for a few minutes to crisp further."
+    ],
+    "storage": "Store in an airtight container for up to 3 days."
+  }
+];
+
+let mealPlan = {
+    Breakfast: [],
+    Lunch: [],
+    Dinner: []
+};
+let groceryList = new Map();
+
+function loadRecipes() {
+    displayRecipes(recipes);
+}
+
+function displayRecipes(recipesToShow) {
+    const resultsContainer = document.getElementById('recipe-results');
+    resultsContainer.innerHTML = '';
+
+    recipesToShow.forEach(recipe => {
+        const recipeCard = document.createElement('div');
+        recipeCard.className = 'recipe-card';
+        
+        // Always show dropdown with all meal types (Breakfast, Lunch, Dinner)
+        const allMealTypes = ['Breakfast', 'Lunch', 'Dinner'];
+        let addToMealPlanButton =
+            '<div class="meal-type-dropdown">' +
+                '<button onclick="toggleMealOptions(' + recipes.indexOf(recipe) + ')" class="btn btn-add">Add to Meal Plan ▾</button>' +
+                '<div id="meal-options-' + recipes.indexOf(recipe) + '" class="meal-options hidden">' +
+                    allMealTypes.map(mealType =>
+                        '<button onclick="addToMealPlan(' + recipes.indexOf(recipe) + ', 1, \'' + mealType + '\')" class="btn btn-meal-option">' + mealType + '</button>'
+                    ).join('') +
+                '</div>' +
+            '</div>';
+        
+        const imageUrl = recipe.image || '';
+
+        recipeCard.innerHTML =
+            '<div class="recipe-image-wrapper">' +
+                '<img src="' + imageUrl + '" alt="' + recipe.title + '" class="recipe-image">' +
+            '</div>' +
+            '<div class="recipe-content">' +
+                '<h3>' + recipe.title + '</h3>' +
+                '<p><strong>Meal:</strong> ' + recipe.section + '</p>' +
+                '<p><strong>Time:</strong> ' + recipe.estimated_time + '</p>' +
+                '<p><strong>Type:</strong> ' + recipe.meal_type + '</p>' +
+                '<div class="recipe-actions">' +
+                    '<button onclick="viewRecipe(' + recipes.indexOf(recipe) + ')" class="btn btn-view">View Recipe</button>' +
+                    addToMealPlanButton +
+                '</div>' +
+            '</div>';
+        resultsContainer.appendChild(recipeCard);
+    });
+}
+
+function searchRecipes() {
+    const searchTerm = document.getElementById('search-input').value.toLowerCase();
+    const mealFilter = document.getElementById('meal-filter').value;
+
+    let filteredRecipes = recipes.filter(recipe => {
+        const matchesSearch = recipe.title.toLowerCase().includes(searchTerm) ||
+                            recipe.dietary_restrictions.toLowerCase().includes(searchTerm) ||
+                            recipe.ingredients.some(ingredient => 
+                                ingredient.name.toLowerCase().includes(searchTerm));
+        
+        const matchesMeal = !mealFilter || recipe.section === mealFilter;
+        
+        return matchesSearch && matchesMeal;
+    });
+
+    displayRecipes(filteredRecipes);
+}
+
+function viewRecipe(index, servingMultiplier) {
+    const recipe = recipes[index];
+    const modal = document.getElementById('recipe-modal');
+    const content = document.getElementById('modal-recipe-content');
+    const multiplier = servingMultiplier || 1;
+    
+    const adjustedServings = recipe.servings ? Math.round(recipe.servings * multiplier) : null;
+    
+    content.innerHTML = 
+        '<h2>' + recipe.title + '</h2>' +
+        (recipe.description ? '<p class="recipe-description">' + recipe.description + '</p>' : '') +
+        '<div class="serving-controls">' +
+            '<label for="serving-multiplier">Adjust Servings: </label>' +
+            '<button onclick="adjustServings(' + index + ', 1)" class="btn">×1</button>' +
+            '<button onclick="adjustServings(' + index + ', 2)" class="btn">×2</button>' +
+            '<button onclick="adjustServings(' + index + ', 3)" class="btn">×3</button>' +
+        '</div>' +
+        (recipe.servings ? '<p><strong>Servings:</strong> ' + adjustedServings + ' | <strong>Prep:</strong> ' + recipe.prep_time + ' | <strong>Cook:</strong> ' + recipe.cook_time + '</p>' : '<p><strong>Estimated Time:</strong> ' + recipe.estimated_time + '</p>') +
+        (recipe.pans_needed ? '<p><strong>Pans Needed:</strong> ' + recipe.pans_needed + '</p>' : '') +
+        '<p><strong>Meal Type:</strong> ' + recipe.section + '</p>' +
+        '<p><strong>Meal Category:</strong> ' + recipe.meal_type + '</p>' +
+        '<p><strong>Dietary Restrictions:</strong> ' + recipe.dietary_restrictions + '</p>' +
+        '<h3>Ingredients:</h3>' +
+        '<ul>' +
+            recipe.ingredients.map(function(ingredient) {
+                const adjustedQuantity = adjustIngredientQuantity(ingredient.quantity, multiplier);
+                const description = ingredient.description ? ', ' + ingredient.description : '';
+                return '<li>' + adjustedQuantity + ' ' + ingredient.name + description + '</li>';
+            }).join('') +
+        '</ul>' +
+        (recipe.steps ? '<h3>Steps:</h3><ol>' + recipe.steps.map(function(step) { return '<li>' + step + '</li>'; }).join('') + '</ol>' : '') +
+        (recipe.nutrition ? '<h3>Nutrition (per serving):</h3><p>Calories: ' + recipe.nutrition.calories + ' • Fat: ' + recipe.nutrition.fat + ' • Carbs: ' + recipe.nutrition.carbs + ' • Protein: ' + recipe.nutrition.protein + (recipe.nutrition.fiber ? ' • Fiber: ' + recipe.nutrition.fiber : '') + (recipe.nutrition.sodium ? ' • Sodium: ' + recipe.nutrition.sodium : '') + (recipe.nutrition.sugar ? ' • Sugar: ' + recipe.nutrition.sugar : '') + '</p>' + (recipe.nutrition_total ? '<p class="nutrition-total">' + recipe.nutrition_total + '</p>' : '') : '') +
+        (recipe.reheat ? '<h3>Reheat:</h3><p>' + recipe.reheat + '</p>' : '') +
+        (recipe.storage ? '<h3>Storage:</h3><p>' + recipe.storage + '</p>' : '') +
+        // Always show dropdown with all meal types (Breakfast, Lunch, Dinner)
+        '<div class="meal-type-dropdown">' +
+            '<button onclick="toggleModalMealOptions(' + index + ', ' + multiplier + ')" class="btn btn-add">Add to Meal Plan ▾</button>' +
+            '<div id="modal-meal-options-' + index + '" class="meal-options hidden">' +
+                ['Breakfast', 'Lunch', 'Dinner'].map(mealType =>
+                    '<button onclick="addToMealPlan(' + index + ', ' + multiplier + ', \'' + mealType + '\')" class="btn btn-meal-option">' + mealType + '</button>'
+                ).join('') +
+            '</div>' +
+        '</div>';
+    
+    modal.style.display = 'block';
+}
+
+function toggleMealOptions(recipeIndex) {
+    const optionsDiv = document.getElementById('meal-options-' + recipeIndex);
+    
+    // Hide all other open meal options
+    document.querySelectorAll('.meal-options').forEach(option => {
+        if (option.id !== 'meal-options-' + recipeIndex) {
+            option.classList.add('hidden');
+        }
+    });
+    
+    // Toggle current options
+    optionsDiv.classList.toggle('hidden');
+}
+
+function toggleModalMealOptions(recipeIndex, multiplier) {
+    const optionsDiv = document.getElementById('modal-meal-options-' + recipeIndex);
+    
+    // Hide all other open meal options
+    document.querySelectorAll('.meal-options').forEach(option => {
+        if (option.id !== 'modal-meal-options-' + recipeIndex) {
+            option.classList.add('hidden');
+        }
+    });
+    
+    // Toggle current options
+    optionsDiv.classList.toggle('hidden');
+}
+
+function addToMealPlan(index, servingMultiplier, selectedMealType) {
+    const recipe = recipes[index];
+    const multiplier = servingMultiplier || 1;
+    const mealType = selectedMealType || recipe.section;
+    
+    // Hide all meal option dropdowns after selection
+    document.querySelectorAll('.meal-options').forEach(option => {
+        option.classList.add('hidden');
+    });
+    
+    const adjustedRecipe = Object.assign({}, recipe);
+    adjustedRecipe.servingMultiplier = multiplier;
+    
+    if (multiplier !== 1) {
+        adjustedRecipe.title = recipe.title + ' (×' + multiplier + ')';
+        adjustedRecipe.servings = recipe.servings ? Math.round(recipe.servings * multiplier) : null;
+        adjustedRecipe.ingredients = recipe.ingredients.map(function(ingredient) {
+            return {
+                name: ingredient.name,
+                quantity: adjustIngredientQuantity(ingredient.quantity, multiplier),
+                description: ingredient.description
+            };
+        });
+    }
+    
+    // Check if the base recipe (without serving multiplier) is already in meal plan
+    const baseRecipeTitle = recipe.title;
+    const existingRecipe = mealPlan[mealType].find(function(r) { 
+        return r.title === baseRecipeTitle || r.title.replace(/ \(×\d+\)$/, '') === baseRecipeTitle; 
+    });
+    
+    if (!existingRecipe) {
+        mealPlan[mealType].push(adjustedRecipe);
+        updateMealPlanDisplay();
+        addIngredientsToGroceryList(adjustedRecipe.ingredients);
+        
+        document.getElementById('recipe-modal').style.display = 'none';
+        showNotification('Recipe added to meal plan!', 'success');
+    } else {
+        const currentServingText = existingRecipe.servingMultiplier && existingRecipe.servingMultiplier !== 1 
+            ? ' (×' + existingRecipe.servingMultiplier + ')' 
+            : '';
+        showNotification('This recipe is already in your meal plan' + currentServingText + '. Use the serving controls in meal planning to adjust the existing one.', 'warning');
+    }
+}
+
+function updateMealPlanDisplay() {
+    Object.keys(mealPlan).forEach(mealType => {
+        const container = document.getElementById(`${mealType.toLowerCase()}-meals`);
+        container.innerHTML = '';
+        
+        mealPlan[mealType].forEach((recipe, index) => {
+            const mealItem = document.createElement('div');
+            mealItem.className = 'meal-item';
+            mealItem.draggable = true;
+            mealItem.setAttribute('data-meal-type', mealType);
+            mealItem.setAttribute('data-recipe-index', index);
+            mealItem.innerHTML = 
+                '<div class="meal-info" onclick="viewRecipe(' + recipes.indexOf(recipe) + ')">' +
+                    '<span class="drag-handle">⋮⋮</span>' +
+                    '<div class="meal-details">' +
+                        '<h4>' + recipe.title + '</h4>' +
+                        '<p>' + recipe.estimated_time + '</p>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="meal-controls">' +
+                    '<div class="serving-buttons">' +
+                        '<button onclick="adjustMealServings(\'' + mealType + '\', ' + index + ', 1)" class="btn btn-serving ' + (recipe.servingMultiplier === 1 || !recipe.servingMultiplier ? 'active' : '') + '">×1</button>' +
+                        '<button onclick="adjustMealServings(\'' + mealType + '\', ' + index + ', 2)" class="btn btn-serving ' + (recipe.servingMultiplier === 2 ? 'active' : '') + '">×2</button>' +
+                        '<button onclick="adjustMealServings(\'' + mealType + '\', ' + index + ', 3)" class="btn btn-serving ' + (recipe.servingMultiplier === 3 ? 'active' : '') + '">×3</button>' +
+                    '</div>' +
+                    '<button onclick="removeFromMealPlan(\'' + mealType + '\', ' + index + ')" class="btn btn-remove">×</button>' +
+                '</div>';
+            
+            // Add drag event listeners
+            mealItem.addEventListener('dragstart', handleDragStart);
+            mealItem.addEventListener('dragend', handleDragEnd);
+            mealItem.addEventListener('dragover', handleItemDragOver);
+            mealItem.addEventListener('dragenter', handleItemDragEnter);
+            mealItem.addEventListener('dragleave', handleItemDragLeave);
+            mealItem.addEventListener('drop', handleItemDrop);
+            
+            container.appendChild(mealItem);
+        });
+    });
+}
+
+function removeFromMealPlan(mealType, index) {
+    const removedRecipe = mealPlan[mealType][index];
+    mealPlan[mealType].splice(index, 1);
+    
+    removeIngredientsFromGroceryList(removedRecipe.ingredients);
+    updateMealPlanDisplay();
+}
+
+function parseQuantity(quantityStr) {
+    // Enhanced regex to handle mixed numbers like "1 1/3", simple fractions "1/3", and decimals "2.5"
+    const mixedNumberMatch = quantityStr.match(/^(\d+)\s+(\d+)\/(\d+)\s*(.*)$/);
+    if (mixedNumberMatch) {
+        const whole = parseFloat(mixedNumberMatch[1]);
+        const numerator = parseFloat(mixedNumberMatch[2]);
+        const denominator = parseFloat(mixedNumberMatch[3]);
+        const unit = mixedNumberMatch[4].trim();
+        const number = whole + (numerator / denominator);
+        return { number: number, unit: unit };
+    }
+    
+    // Handle simple fractions like "1/3"
+    const fractionMatch = quantityStr.match(/^(\d+)\/(\d+)\s*(.*)$/);
+    if (fractionMatch) {
+        const numerator = parseFloat(fractionMatch[1]);
+        const denominator = parseFloat(fractionMatch[2]);
+        const unit = fractionMatch[3].trim();
+        return { number: numerator / denominator, unit: unit };
+    }
+    
+    // Handle regular numbers (including decimals)
+    const numberMatch = quantityStr.match(/^(\d+(?:\.\d+)?)\s*(.*)$/);
+    if (numberMatch) {
+        const number = parseFloat(numberMatch[1]);
+        const unit = numberMatch[2].trim();
+        return { number: number, unit: unit };
+    }
+    
+    return { number: 0, unit: quantityStr };
+}
+
+function formatQuantity(number, unit) {
+    // Round to reasonable precision
+    const rounded = Math.round(number * 100) / 100;
+    
+    // Convert decimals to fractions for common cooking measurements
+    if (rounded % 1 !== 0) {
+        const decimal = rounded % 1;
+        const whole = Math.floor(rounded);
+        
+        // Common cooking fractions with better tolerance
+        if (Math.abs(decimal - 0.125) < 0.01) return (whole > 0 ? whole + ' ' : '') + '1/8 ' + unit;
+        if (Math.abs(decimal - 0.25) < 0.01) return (whole > 0 ? whole + ' ' : '') + '1/4 ' + unit;
+        if (Math.abs(decimal - 0.33) < 0.02) return (whole > 0 ? whole + ' ' : '') + '1/3 ' + unit;
+        if (Math.abs(decimal - 0.375) < 0.01) return (whole > 0 ? whole + ' ' : '') + '3/8 ' + unit;
+        if (Math.abs(decimal - 0.5) < 0.01) return (whole > 0 ? whole + ' ' : '') + '1/2 ' + unit;
+        if (Math.abs(decimal - 0.625) < 0.01) return (whole > 0 ? whole + ' ' : '') + '5/8 ' + unit;
+        if (Math.abs(decimal - 0.67) < 0.02) return (whole > 0 ? whole + ' ' : '') + '2/3 ' + unit;
+        if (Math.abs(decimal - 0.75) < 0.01) return (whole > 0 ? whole + ' ' : '') + '3/4 ' + unit;
+        if (Math.abs(decimal - 0.875) < 0.01) return (whole > 0 ? whole + ' ' : '') + '7/8 ' + unit;
+        
+        // If no common fraction matches, try to convert to a simple fraction
+        const tolerance = 0.01;
+        for (let denominator = 2; denominator <= 16; denominator++) {
+            const numerator = Math.round(decimal * denominator);
+            if (Math.abs(decimal - numerator / denominator) < tolerance) {
+                if (numerator < denominator) {
+                    return (whole > 0 ? whole + ' ' : '') + numerator + '/' + denominator + ' ' + unit;
+                }
+            }
+        }
+    }
+    
+    return rounded + ' ' + unit;
+}
+
+function adjustIngredientQuantity(quantityStr, multiplier) {
+    if (multiplier === 1) return quantityStr;
+    
+    const parsed = parseQuantity(quantityStr);
+    if (parsed.number === 0) return quantityStr;
+    
+    const adjustedNumber = parsed.number * multiplier;
+    return formatQuantity(adjustedNumber, parsed.unit);
+}
+
+function adjustServings(index, multiplier) {
+    viewRecipe(index, multiplier);
+}
+
+function adjustMealServings(mealType, mealIndex, newMultiplier) {
+    const recipe = mealPlan[mealType][mealIndex];
+    const originalRecipe = recipes.find(function(r) { 
+        return r.title === recipe.title.replace(/ \(×\d+\)$/, ''); 
+    });
+    
+    if (!originalRecipe) return;
+    
+    // Remove old ingredients from grocery list
+    removeIngredientsFromGroceryList(recipe.ingredients);
+    
+    // Update the recipe with new serving size
+    const adjustedRecipe = Object.assign({}, originalRecipe);
+    adjustedRecipe.servingMultiplier = newMultiplier;
+    
+    if (newMultiplier !== 1) {
+        adjustedRecipe.title = originalRecipe.title + ' (×' + newMultiplier + ')';
+        adjustedRecipe.servings = originalRecipe.servings ? Math.round(originalRecipe.servings * newMultiplier) : null;
+        adjustedRecipe.ingredients = originalRecipe.ingredients.map(function(ingredient) {
+            return {
+                name: ingredient.name,
+                quantity: adjustIngredientQuantity(ingredient.quantity, newMultiplier),
+                description: ingredient.description
+            };
+        });
+    } else {
+        adjustedRecipe.title = originalRecipe.title;
+    }
+    
+    // Replace the recipe in meal plan
+    mealPlan[mealType][mealIndex] = adjustedRecipe;
+    
+    // Add new ingredients to grocery list
+    addIngredientsToGroceryList(adjustedRecipe.ingredients);
+    
+    // Update displays
+    updateMealPlanDisplay();
+}
+
+function addIngredientsToGroceryList(ingredients) {
+    ingredients.forEach(ingredient => {
+        if (ingredient.name === "Total List") return;
+        
+        // Special handling for salt and cinnamon - just show name without quantity/unit
+        if (ingredient.name.toLowerCase() === 'salt') {
+            groceryList.set(ingredient.name, {
+                name: ingredient.name,
+                quantity: '',
+                count: groceryList.has(ingredient.name) ? groceryList.get(ingredient.name).count + 1 : 1
+            });
+            return;
+        }
+        
+        if (ingredient.name.toLowerCase() === 'cinnamon') {
+            groceryList.set(ingredient.name, {
+                name: ingredient.name,
+                quantity: '',
+                count: groceryList.has(ingredient.name) ? groceryList.get(ingredient.name).count + 1 : 1
+            });
+            return;
+        }
+        
+        if (groceryList.has(ingredient.name)) {
+            const existing = groceryList.get(ingredient.name);
+            const existingParsed = parseQuantity(existing.quantity);
+            const newParsed = parseQuantity(ingredient.quantity);
+            
+            // Normalize units for comparison (handle plural/singular)
+            const normalizeUnit = function(unit) {
+                const unitLower = unit.toLowerCase();
+                // Handle common unit variations
+                if (unitLower === 'cups' || unitLower === 'cup') return 'cup';
+                if (unitLower === 'tbsp' || unitLower === 'tablespoons' || unitLower === 'tablespoon') return 'tbsp';
+                if (unitLower === 'tsp' || unitLower === 'teaspoons' || unitLower === 'teaspoon') return 'tsp';
+                if (unitLower === 'lbs' || unitLower === 'lb' || unitLower === 'pounds' || unitLower === 'pound') return 'lb';
+                if (unitLower === 'ozs' || unitLower === 'oz' || unitLower === 'ounces' || unitLower === 'ounce') return 'oz';
+                return unitLower;
+            };
+            
+            const existingUnit = normalizeUnit(existingParsed.unit);
+            const newUnit = normalizeUnit(newParsed.unit);
+            
+            // If units match or are compatible, add the numbers
+            if (existingUnit === newUnit && existingParsed.number > 0 && newParsed.number > 0) {
+                const totalNumber = existingParsed.number + newParsed.number;
+                groceryList.set(ingredient.name, {
+                    name: ingredient.name,
+                    quantity: formatQuantity(totalNumber, existingParsed.unit),
+                    count: existing.count + 1
+                });
+            } else {
+                // Units don't match, show as separate quantities
+                groceryList.set(ingredient.name, {
+                    name: ingredient.name,
+                    quantity: existing.quantity + ' + ' + ingredient.quantity,
+                    count: existing.count + 1
+                });
+            }
+        } else {
+            groceryList.set(ingredient.name, {
+                name: ingredient.name,
+                quantity: ingredient.quantity,
+                count: 1
+            });
+        }
+    });
+    updateGroceryListDisplay();
+}
+
+function removeIngredientsFromGroceryList(ingredients) {
+    ingredients.forEach(ingredient => {
+        if (ingredient.name === "Total List") return;
+        
+        if (groceryList.has(ingredient.name)) {
+            const existing = groceryList.get(ingredient.name);
+            if (existing.count > 1) {
+                // Try to subtract the quantity if possible
+                const existingParsed = parseQuantity(existing.quantity);
+                const removeParsed = parseQuantity(ingredient.quantity);
+                
+                const normalizeUnit = function(unit) {
+                    const unitLower = unit.toLowerCase();
+                    if (unitLower === 'cups' || unitLower === 'cup') return 'cup';
+                    if (unitLower === 'tbsp' || unitLower === 'tablespoons' || unitLower === 'tablespoon') return 'tbsp';
+                    if (unitLower === 'tsp' || unitLower === 'teaspoons' || unitLower === 'teaspoon') return 'tsp';
+                    if (unitLower === 'lbs' || unitLower === 'lb' || unitLower === 'pounds' || unitLower === 'pound') return 'lb';
+                    if (unitLower === 'ozs' || unitLower === 'oz' || unitLower === 'ounces' || unitLower === 'ounce') return 'oz';
+                    return unitLower;
+                };
+                
+                const existingUnit = normalizeUnit(existingParsed.unit);
+                const removeUnit = normalizeUnit(removeParsed.unit);
+                
+                if (existingUnit === removeUnit && existingParsed.number > 0 && removeParsed.number > 0) {
+                    const remainingNumber = existingParsed.number - removeParsed.number;
+                    if (remainingNumber > 0) {
+                        groceryList.set(ingredient.name, {
+                            name: ingredient.name,
+                            quantity: formatQuantity(remainingNumber, existingParsed.unit),
+                            count: existing.count - 1
+                        });
+                    } else {
+                        groceryList.delete(ingredient.name);
+                    }
+                } else {
+                    // Can't subtract, just reduce count
+                    groceryList.set(ingredient.name, {
+                        ...existing,
+                        count: existing.count - 1
+                    });
+                }
+            } else {
+                groceryList.delete(ingredient.name);
+            }
+        }
+    });
+    updateGroceryListDisplay();
+}
+
+function updateGroceryListDisplay() {
+    const container = document.getElementById('grocery-items');
+    container.innerHTML = '';
+    
+    groceryList.forEach(function(item) {
+        const groceryItem = document.createElement('div');
+        groceryItem.className = 'grocery-item';
+        groceryItem.innerHTML = 
+            '<span class="ingredient-name">' + item.name + '</span>' +
+            '<span class="ingredient-quantity">' + item.quantity + '</span>' +
+            '<button onclick="removeFromGroceryList(\'' + item.name + '\')" class="btn btn-remove">×</button>';
+        container.appendChild(groceryItem);
+    });
+}
+
+function removeFromGroceryList(ingredientName) {
+    groceryList.delete(ingredientName);
+    updateGroceryListDisplay();
+}
+
+function clearGroceryList() {
+    groceryList.clear();
+    updateGroceryListDisplay();
+}
+
+
+function showNotification(message, type) {
+    const notification = document.getElementById('notification');
+    notification.textContent = message;
+    notification.className = 'notification ' + type + ' show';
+    
+    setTimeout(function() {
+        notification.className = 'notification ' + type;
+    }, 3000);
+}
+
+document.getElementById('search-input').addEventListener('input', searchRecipes);
+document.getElementById('meal-filter').addEventListener('change', searchRecipes);
+document.getElementById('clear-grocery-list').addEventListener('click', clearGroceryList);
+
+document.querySelector('.close').addEventListener('click', function() {
+    document.getElementById('recipe-modal').style.display = 'none';
+});
+
+window.addEventListener('click', function(event) {
+    const recipeModal = document.getElementById('recipe-modal');
+    
+    if (event.target === recipeModal) {
+        recipeModal.style.display = 'none';
+    }
+    
+    // Close meal options when clicking outside
+    if (!event.target.closest('.meal-type-dropdown')) {
+        document.querySelectorAll('.meal-options').forEach(option => {
+            option.classList.add('hidden');
+        });
+    }
+});
+
+// Drag and drop functionality
+let draggedItem = null;
+
+function handleDragStart(e) {
+    draggedItem = {
+        element: this,
+        mealType: this.getAttribute('data-meal-type'),
+        recipeIndex: parseInt(this.getAttribute('data-recipe-index'))
+    };
+    this.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+}
+
+function handleDragEnd(e) {
+    this.classList.remove('dragging');
+    draggedItem = null;
+    
+    // Remove drag-over styling from all drop zones and items
+    document.querySelectorAll('.drop-zone').forEach(zone => {
+        zone.classList.remove('drag-over');
+    });
+    
+    document.querySelectorAll('.meal-item').forEach(item => {
+        item.classList.remove('insert-above', 'insert-below');
+    });
+}
+
+function handleDragOver(e) {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+}
+
+function handleDragEnter(e) {
+    e.preventDefault();
+    if (draggedItem && this.getAttribute('data-meal') !== draggedItem.mealType) {
+        this.classList.add('drag-over');
+    }
+}
+
+function handleDragLeave(e) {
+    if (e.target === this) {
+        this.classList.remove('drag-over');
+    }
+}
+
+function handleItemDragOver(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (!draggedItem || draggedItem.element === this) return;
+    
+    const rect = this.getBoundingClientRect();
+    const midpoint = rect.top + rect.height / 2;
+    const mouseY = e.clientY;
+    
+    // Clear previous indicators
+    document.querySelectorAll('.meal-item').forEach(item => {
+        item.classList.remove('insert-above', 'insert-below');
+    });
+    
+    if (mouseY < midpoint) {
+        this.classList.add('insert-above');
+    } else {
+        this.classList.add('insert-below');
+    }
+}
+
+function handleItemDragEnter(e) {
+    e.preventDefault();
+    e.stopPropagation();
+}
+
+function handleItemDragLeave(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    // Only remove indicators if we're actually leaving the item
+    if (!this.contains(e.relatedTarget)) {
+        this.classList.remove('insert-above', 'insert-below');
+    }
+}
+
+function handleItemDrop(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (!draggedItem || draggedItem.element === this) return;
+    
+    const targetMealType = this.getAttribute('data-meal-type');
+    const targetIndex = parseInt(this.getAttribute('data-recipe-index'));
+    const sourceMealType = draggedItem.mealType;
+    const sourceIndex = draggedItem.recipeIndex;
+    
+    const recipe = mealPlan[sourceMealType][sourceIndex];
+    
+    // Remove from source
+    mealPlan[sourceMealType].splice(sourceIndex, 1);
+    
+    // Determine insertion position
+    let insertIndex = targetIndex;
+    const isInsertBelow = this.classList.contains('insert-below');
+    
+    if (sourceMealType === targetMealType) {
+        // Reordering within same meal type
+        if (sourceIndex < targetIndex) {
+            insertIndex = isInsertBelow ? targetIndex : targetIndex - 1;
+        } else {
+            insertIndex = isInsertBelow ? targetIndex + 1 : targetIndex;
+        }
+    } else {
+        // Moving between meal types
+        insertIndex = isInsertBelow ? targetIndex + 1 : targetIndex;
+    }
+    
+    // Insert at new position
+    mealPlan[targetMealType].splice(insertIndex, 0, recipe);
+    
+    // Clear indicators
+    document.querySelectorAll('.meal-item').forEach(item => {
+        item.classList.remove('insert-above', 'insert-below');
+    });
+    
+    // Update display
+    updateMealPlanDisplay();
+    
+    // Show notification
+    if (sourceMealType === targetMealType) {
+        showNotification(`Reordered "${recipe.title}" within ${targetMealType}`, 'success');
+    } else {
+        showNotification(`Moved "${recipe.title}" from ${sourceMealType} to ${targetMealType}`, 'success');
+    }
+}
+
+function handleDrop(e) {
+    e.preventDefault();
+    this.classList.remove('drag-over');
+    
+    if (!draggedItem) return;
+    
+    const targetMealType = this.getAttribute('data-meal');
+    const sourceMealType = draggedItem.mealType;
+    const sourceIndex = draggedItem.recipeIndex;
+    
+    // Don't do anything if dropped on the same meal type (empty area)
+    if (targetMealType === sourceMealType) return;
+    
+    // Move the recipe between meal types (append to end)
+    const recipe = mealPlan[sourceMealType][sourceIndex];
+    mealPlan[sourceMealType].splice(sourceIndex, 1);
+    mealPlan[targetMealType].push(recipe);
+    
+    // Update the display
+    updateMealPlanDisplay();
+    
+    // Show notification
+    showNotification(`Moved "${recipe.title}" from ${sourceMealType} to ${targetMealType}`, 'success');
+}
+
+// Add event listeners to drop zones
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.drop-zone').forEach(zone => {
+        zone.addEventListener('dragover', handleDragOver);
+        zone.addEventListener('dragenter', handleDragEnter);
+        zone.addEventListener('dragleave', handleDragLeave);
+        zone.addEventListener('drop', handleDrop);
+    });
+});
+
+loadRecipes();
+    </script>
+</body>
+</html>

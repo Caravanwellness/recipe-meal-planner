@@ -1,0 +1,323 @@
+[
+  {
+    "id": 0,
+    "title": "Chickpea, Sweet Potato & Rice Bake",
+    "section": "Lunch, Dinner",
+    "estimated_time": "40 Minutes (10 prep, 30 bake)",
+    "meal_type": "Multi-Serving Meal Prep",
+    "dietary_restrictions": "Post-Surgery, Limited Ingredient, Easy to Digest, Meal Prep, Easy Reheat, Plant-based",
+    "image": "images/Chickpea, Sweet Potato & Rice Bake.png",
+    "servings": "6",
+    "prep_time": "10 min",
+    "cook_time": "30 min",
+    "ingredients": [
+      {"name": "Canned Chickpeas", "quantity": "1 cup", "description": "drained"},
+      {"name": "Sweet Potatoes", "quantity": "2 medium", "description": ""},
+      {"name": "Rice", "quantity": "1 cup", "description": "cooked"}
+    ],
+    "steps": [
+      "Peel and cube sweet potatoes (about 1/2-inch).",
+      "Steam or microwave for 5–7 minutes until just tender.",
+      "In a bowl, mix chickpeas, sweet potatoes, rice, and a pinch of salt.",
+      "Lightly grease a baking dish (about 9x9-inch) and spread the mixture evenly.",
+      "Bake uncovered at 350°F (175°C) for 25–30 minutes, until heated through and lightly crisped on top.",
+      "Let rest a few minutes before serving."
+    ],
+    "nutrition": {
+      "calories": "190",
+      "fat": "1g",
+      "carbs": "32g",
+      "protein": "8g"
+    },
+    "reheat": "Covered in microwave, 2 min; oven 325°F 10 min.",
+    "storage": "Refrigerate 4 days; freeze 2 months."
+  },
+  {
+    "id": 1,
+    "title": "Zucchini, Quinoa & Tomato Bake",
+    "section": "Lunch, Dinner",
+    "estimated_time": "40 Minutes (10 prep, 30 bake)",
+    "meal_type": "Multi-Serving Meal Prep",
+    "dietary_restrictions": "Post-Surgery, Limited Ingredient, Easy to Digest, Meal Prep, Easy Reheat, Plant-based",
+    "image": "images/Zucchini, Quinoa & Tomato Bake.png",
+    "servings": "5",
+    "prep_time": "10 min",
+    "cook_time": "30 min",
+    "ingredients": [
+      {"name": "Zucchini", "quantity": "2 cups", "description": "diced"},
+      {"name": "Quinoa", "quantity": "1 cup", "description": "cooked"},
+      {"name": "Canned Tomato Puree", "quantity": "1 cup", "description": ""},
+      {"name": "Salt", "quantity": "Pinch", "description": ""}
+    ],
+    "steps": [
+      "In a large bowl, combine zucchini, quinoa, tomato puree, and a pinch of salt. Stir until fully mixed.",
+      "Transfer the mixture to a greased baking dish (about 8x8 or 9x9 inches), spreading it out evenly.",
+      "Bake uncovered for 25–30 minutes, until heated through and the top is slightly thickened."
+    ],
+    "nutrition": {
+      "calories": "170",
+      "fat": "1g",
+      "carbs": "32g",
+      "protein": "6g"
+    },
+    "reheat": "Microwave or oven with splash of broth.",
+    "storage": "Refrigerate 4 days; freeze 2 months."
+  },
+  {
+    "id": 2,
+    "title": "DASH Turkey Shepherd's Pie",
+    "section": "Lunch, Dinner",
+    "estimated_time": "50 Minute (15 prep 35 bake)",
+    "meal_type": "Multi-Serving Meal Prep",
+    "dietary_restrictions": "Post-Surgery, Limited Ingredient, DASH Diet, Easy to Digest, Meal Prep, Easy Reheat",
+    "description": "Ground turkey layered under a thin mashed potato topping, flavored mildly with steamed carrots or peas. Lower in fat and sodium than the traditional version.",
+    "image": "images/DASH Turkey Shepherd's Pie.png",
+    "servings": "5",
+    "prep_time": "15 min",
+    "cook_time": "35 min",
+    "ingredients": [
+      {"name": "Lean Ground Turkey", "quantity": "1 lb", "description": ""},
+      {"name": "Cooked Peas and Chopped Carrots", "quantity": "2 cups", "description": "soft"},
+      {"name": "Mashed Potatoes", "quantity": "3 cups", "description": "made with water or milk"},
+      {"name": "Salt", "quantity": "Pinch", "description": ""},
+      {"name": "Pepper", "quantity": "Pinch", "description": ""}
+    ],
+    "steps": [
+      "Preheat 375°F. In dish",
+      "Prepare ground turkey in skillet until fully cooked",
+      "Layer turkey base, vegetables, then top with mashed potato. Bake 30 min until lightly set."
+    ],
+    "nutrition": {
+      "calories": "240",
+      "fat": "4g",
+      "carbs": "30g",
+      "protein": "16g"
+    },
+    "reheat": "Oven: 325°F for 15 min, covered. Microwave: Cover, 2 min, stir halfway",
+    "storage": "Refrigerate 4 days; freeze 2 months."
+  },
+  {
+    "id": 3,
+    "title": "Hummus & Soft Pita Pockets",
+    "section": "Lunch, Dinner",
+    "estimated_time": "5 Minutes",
+    "meal_type": "Snack, Lunch",
+    "dietary_restrictions": "Easily Digestible, Plant-based",
+    "description": "For those tolerating legumes well, soft hummus with pita can be a great protein snack. Choose plain hummus without garlic or lemon for sensitivity.",
+    "image": "images/Hummus & Soft Pita Pockets.png",
+    "servings": "1",
+    "prep_time": "5 min",
+    "cook_time": "No Cook",
+    "ingredients": [
+      {"name": "Hummus", "quantity": "1/4 cup", "description": "plain"},
+      {"name": "Pita", "quantity": "1/2 piece", "description": "warmed slightly or room temp"}
+    ],
+    "steps": [
+      "Warm 1/2 soft pita bread slightly or use at room temperature.",
+      "Spread 1/4 cup plain hummus evenly inside the pita half, or serve the hummus on the side for dipping.",
+      "Serve immediately as a quick and easy plant-based protein snack."
+    ],
+    "nutrition": {
+      "calories": "180",
+      "fat": "6g",
+      "carbs": "24g",
+      "protein": "6g"
+    },
+    "storage": "Consume same day. Pita may harden in fridge."
+  },
+  {
+    "id": 4,
+    "title": "Low-Sodium Chicken & Rice Casserole",
+    "section": "Lunch, Dinner",
+    "estimated_time": "45 Minutes (10 prep, 35 bake) ",
+    "meal_type": "Multi-Serving Meal Prep",
+    "dietary_restrictions": "Post-Surgery, Limited Ingredient, DASH Diet, Easy to Digest, Meal Prep, Easy Reheat",
+    "description": "A classic chicken-and-rice bake with modest seasoning, tender chicken breast, soft rice, and a light milk-based sauce. Comforting like homemade but gentle on digestion and sodium-conscious.",
+    "image": "images/Low-Sodium Chicken & Rice Casserole.png",
+    "servings": "6",
+    "prep_time": "10 min",
+    "cook_time": "35 min",
+    "ingredients": [
+      {"name": "Chicken Breast", "quantity": "3 cups", "description": "shredded cooked"},
+      {"name": "White Rice", "quantity": "1 1/2 cups", "description": "cooked"},
+      {"name": "Milk", "quantity": "1 1/2 cups", "description": "low-fat"},
+      {"name": "Dried Parsley", "quantity": "1 tsp", "description": ""},
+      {"name": "Salt", "quantity": "Pinch", "description": ""}
+    ],
+    "steps": [
+      "Lightly grease a baking dish (about 9x13 inches).",
+      "In a large bowl, combine chicken, rice, milk, parsley, and a pinch of salt. Mix until well combined.",
+      "Pour the mixture into the prepared baking dish, spreading it evenly.",
+      "Cover with foil and bake for 30 minutes.",
+      "Uncover dish and bake for an additional 5 minutes, until the top is lightly golden."
+    ],
+    "nutrition": {
+      "calories": "210",
+      "fat": "4g",
+      "carbs": "20g",
+      "protein": "22g"
+    },
+    "reheat": "Oven: 325°F for ~10 min covered, adding splash of milk if dry. Microwave: Covered, 1–2 min, stir halfway",
+    "storage": "Refrigerate up to 4 days; freeze up to 2 months. Thaw overnight before heating."
+  },
+  {
+    "id": 5,
+    "title": "Egg and Ricotta Pancakes",
+    "section": "Breakfast",
+    "estimated_time": "13 Minutes",
+    "meal_type": "Breakfast",
+    "dietary_restrictions": "Post-Surgery- Eaily Digestible, High Calorie",
+    "description": "These soft, protein-rich pancakes use eggs and ricotta to create a light and fluffy texture. Ricotta offers digestible protein and calcium, while a small amount of flour makes them feel more like a traditional breakfast dish.",
+    "image": "images/Egg and Ricotta Pancakes.png",
+    "servings": "2",
+    "prep_time": "5 min",
+    "cook_time": "8 min",
+    "pans_needed": "1 skillet or griddle",
+    "ingredients": [
+      {"name": "Eggs", "quantity": "2 large", "description": ""},
+      {"name": "Ricotta Cheese", "quantity": "1/2 cup", "description": ""},
+      {"name": "All Purpose Flour", "quantity": "2 tbsp", "description": ""},
+      {"name": "Vanilla", "quantity": "1/4 tsp", "description": "optional for flavor"},
+      {"name": "Olive Oil/Butter", "quantity": "1 tsp", "description": "for cooking"}
+    ],
+    "steps": [
+      "Mix eggs, ricotta, flour, and vanilla in a bowl until smooth.",
+      "Heat a nonstick skillet with a little oil over medium-low heat.",
+      "Pour batter to form small pancakes and cook for 3 to 4 minutes per side until golden and cooked through.",
+      "Serve warm."
+    ],
+    "nutrition": {
+      "calories": "230",
+      "fat": "16g",
+      "carbs": "6g",
+      "protein": "14g",
+      "fiber": "0g",
+      "sodium": "130mg",
+      "sugar": "1g"
+    },
+    "nutrition_total": "Total (for 2 Servings): Calories: 460, Fat: 32g, Carbs: 12g, Protein: 28g, Fiber: 0g, Sodium: 260mg, Sugar: 2g"
+  },
+  {
+    "id": 6,
+    "title": "Savory Egg Muffins with Soft Veggies & Cheese",
+    "section": "Breakfast",
+    "estimated_time": "28 Minutes (10 prep, 20 bake)",
+    "meal_type": "Breakfast",
+    "dietary_restrictions": "Post-Surgery- Eaily Digestible, High Calorie",
+    "description": "These savory egg muffins are soft, flavorful, and can be made ahead. They're filled with finely chopped sautéed vegetables like zucchini and carrots, plus mild cheese for protein and richness. Baking makes them light and tender, making them easy to eat, but genuinely tasty.",
+    "image": "images/Savory Egg Muffins with Soft Veggies & Cheese.png",
+    "servings": "4",
+    "prep_time": "10 min",
+    "cook_time": "18 min",
+    "pans_needed": "1 muffin tin + 1 skillet",
+    "ingredients": [
+      {"name": "Eggs", "quantity": "6 large", "description": ""},
+      {"name": "Shreadded Mild Cheddar or Mozzarella", "quantity": "1/3 cup", "description": ""},
+      {"name": "Chopped Zucchini", "quantity": "1/4 cup", "description": "finely chopped"},
+      {"name": "Carrot", "quantity": "1/4 cup", "description": "finely grated"},
+      {"name": "Olive Oil", "quantity": "1 tsp", "description": ""},
+      {"name": "Salt", "quantity": "Pinch", "description": ""}
+    ],
+    "steps": [
+      "Preheat oven to 350°F (175°C).",
+      "Sauté zucchini and carrot in olive oil for 2–3 minutes until soft.",
+      "In a bowl, beat eggs, add cheese, salt, and sautéed veggies.",
+      "Pour into greased muffin tin (makes ~8 muffins).",
+      "Bake 16–18 minutes until set.",
+      "Let cool slightly before eating."
+    ],
+    "nutrition": {
+      "calories": "210",
+      "fat": "14g",
+      "carbs": "4g",
+      "protein": "15g",
+      "fiber": "0.7g",
+      "sodium": "160mg",
+      "sugar": "2g"
+    },
+    "nutrition_total": "Total (for 4 Servings / 8 muffins): Calories: 840, Fat: 56g, Carbs: 16g, Protein: 60g, Fiber: 2.8g, Sodium: 640mg, Sugar: 8g"
+  },
+  {
+    "id": 7,
+    "title": "Ricotta Toast with Cinnamon Pear",
+    "section": "Breakfast",
+    "estimated_time": "5 Minutes",
+    "meal_type": "Snack, Breakfast",
+    "dietary_restrictions": "Easily Digestible, High Protein",
+    "description": "Ricotta is soft and mild, and pairs beautifully with fresh or canned pears and a sprinkle of cinnamon.",
+    "image": "images/Ricotta Toast with Cinnamon Pear.png",
+    "servings": "1",
+    "prep_time": "5 min",
+    "ingredients": [
+      {"name": "White or Sourdough Bread", "quantity": "1 slice", "description": "soft"},
+      {"name": "Ricotta", "quantity": "1/4 cup", "description": ""},
+      {"name": "Pear", "quantity": "2-3 slices", "description": "ripe or canned"},
+      {"name": "Cinnamon", "quantity": "Dash", "description": ""}
+    ],
+    "steps": [
+      "Spread ricotta on toast, layer pear, sprinkle cinnamon.",
+      "Cut into squares for easier chewing."
+    ],
+    "nutrition": {
+      "calories": "190",
+      "fat": "6g",
+      "carbs": "22g",
+      "protein": "9g"
+    },
+    "storage": "Assemble fresh. Do not freeze."
+  },
+  {
+    "id": 8,
+    "title": "Avocado Toast with Poached Egg",
+    "section": "Breakfast",
+    "estimated_time": "8-10 Minutes",
+    "meal_type": "Snack, Breakfast",
+    "dietary_restrictions": "Prostate or Lung Cancer",
+    "description": "Whole grain toast topped with creamy mashed avocado and a perfectly poached egg with a soft yolk.",
+    "image": "images/Avocado Toast with Poached Egg.png",
+    "servings": "1",
+    "prep_time": "5 min",
+    "cook_time": "5 min",
+    "ingredients": [
+      {"name": "Whole Grain Bread", "quantity": "2 slices", "description": ""},
+      {"name": "Ripe Avocado", "quantity": "1", "description": ""},
+      {"name": "Egg", "quantity": "2", "description": ""},
+      {"name": "Salt", "quantity": "1 pinch", "description": ""},
+      {"name": "Pepper", "quantity": "1 pinch", "description": ""}
+    ],
+    "steps": [
+      "Toast the bread.",
+      "Mash and spread the avocado on the toast.",
+      "Create a whirlpool in simmering water, slide in the egg, and cook for 3 minutes for a soft yolk.",
+      "Remove the egg and drain.",
+      "Top the toast with the poached egg and season with salt, pepper, and optional toppings."
+    ],
+    "storage": "Assemble fresh. Do not store."
+  },
+  {
+    "id": 9,
+    "title": "Baked Sweet Potato Chips",
+    "section": "Lunch, Dinner",
+    "estimated_time": "20-25 Minutes",
+    "meal_type": "Snack",
+    "dietary_restrictions": "Breast, Prostate, Lung and Colon Cancer",
+    "description": "Crispy baked sweet potato chips seasoned with olive oil and salt, a healthy alternative to regular chips.",
+    "image": "images/Baked Sweet Potato Chips.png",
+    "servings": "2-3",
+    "prep_time": "5 min",
+    "cook_time": "20 min",
+    "ingredients": [
+      {"name": "Sweet Potatoes", "quantity": "2 medium", "description": ""},
+      {"name": "Oil of Choice", "quantity": "1 tbsp", "description": ""},
+      {"name": "Salt", "quantity": "1/2 tsp", "description": ""}
+    ],
+    "steps": [
+      "Preheat the oven to 375°F (190°C) and line a baking sheet with parchment paper.",
+      "Wash, dry, and slice the sweet potatoes into thin even rounds.",
+      "Toss with olive oil, salt, and seasonings.",
+      "Arrange in a single layer on the sheet and bake for 15–20 minutes, flipping halfway, until crispy.",
+      "Let cool for a few minutes to crisp further."
+    ],
+    "storage": "Store in an airtight container for up to 3 days."
+  }
+]
