@@ -1,6 +1,6 @@
 {
-  "buildCommand": "npm install",
-  "public": true,
+  "buildCommand": "",
+  "outputDirectory": ".",
   "cleanUrls": true,
   "rewrites": [
     {
